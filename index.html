@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>changelog</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div id="wrapper"><div id="inner">
+
+  <div class="box">
+      <div class="content">
+        <div class="date">intro</div>
+        <div class="message">this code is for a ds pictochat-like log. i use it on my site as a changelog, but i think it would work well for a microblog too. </div>
+      </div>
+  </div>
+
+  <div class="box">
+      <div class="content">
+        <div class="date">installing</div>
+        <div class="message">you can download this code together with the necessary assets on my github <a target="_blank" href="https://github.com/balfiere/pictochat">here</a>.</div>
+      </div>
+  </div>
+
+  <div class="box">
+      <div class="content">
+        <div class="date">customizing</div>
+        <div class="message">at the top of the css, there's a bunch of variables that can be changed to easily customize the look of this log. i've added comments to explain what they do.<br />most notably there's a variable <code>--p</code> that scales the border width and font size. this page is being displayed at <code>--p: 4</code>; you can see an example where <code>--p: 2</code> if you go <a href="/main/index.html">back</a> and click on "changelog". this also shows you how this page looks if you embed it as an iframe inside another page. i recommend keeping <code>--p</code> an integer between 1 and 6.</div>
+      </div>
+  </div>
+
+  <div class="box onepx blue">
+      <div class="content">
+        <div class="date">unique styles</div>
+        <div class="message">this box gives an example of how you can give an individual box a unique style. search <code>unique styles</code> inside the css file to see how to overwrite global variables inside a desired class.</div>
+      </div>
+  </div>
+
+  <div class="box">
+      <div class="content">
+        <div class="date">adding messages</div>
+        <div class="message">simply copy-paste the contents of <code>&lt;div class="box"&gt;...&lt;/div&gt;</code> inside <code>&lt;div id="wrapper"&gt;&lt;div id="inner"&gt;...&lt;/div&gt;&lt;/div&gt;</code>. put the date or title of your post inside <code>&lt;div class="date"&gt;...&lt;/div&gt;</code> and the text of the post inside <code>&lt;div class="message"&gt;...&lt;/div&gt;</code>.</div>
+      </div>
+  </div>
+
+  <div class="box">
+      <div class="content">
+        <div class="date">credit</div>
+        <div class="message">the font is NDS BIOS which i downloaded <a target="_blank" href="https://fonts2u.com/nds-bios.font">here</a>.</div>
+      </div>
+  </div>
+
+</div></div>
+
+<div class="box" style="--pixel:2px; --s:6px; position: fixed; z-index: 10; bottom: 10px; left: 10px; margin-bottom: 0;">
+  <div class="content"><div class="message"><a href="/main/index.html">go back</a></div></div>
+</div>
+
+<script>
+  // if your messages have a variable width (like 90% or 80vw) it'll probably be blurry if the viewport is an odd number. this is a hack i came up to help mitigate the issue
+
+  // Firefox 1.0+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+
+// Chrome 1 - 79
+var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+  
+function round(N,pre) {
+  const x = Math.ceil(N / pre) * pre;
+  wrapper.style.width = x + 'px';
+  
+  if (window.innerWidth % 2 == 1){
+    if (isChrome == true) {
+      document.querySelector('#inner').style.width = round(document.querySelector('#inner').style.width)
+    } 
+    if (isFirefox == true) {
+      document.querySelector('#inner').style.marginLeft = "-0.5px"; 
+    }
+  } else {
+    document.querySelector('#inner').style.marginLeft = "0px";
+  }
+}
+
+var p = window.getComputedStyle(document.body).getPropertyValue('--p'); // get pixel multiplier
+var n = p * 2;
+
+var w = window.getComputedStyle(document.body).getPropertyValue('--wrapper-width'); // get wrapper responsive width
+
+const fn = () => {
+  const wrapper = document.querySelector('#wrapper')
+  wrapper.style.width = w;
+  const wrapperWidth = wrapper.clientWidth;
+  round(wrapperWidth,n);
+}
+
+fn()
+
+window.addEventListener('load', fn)
+window.addEventListener('resize', fn)
+</script>
+
+  </body>
+</html>

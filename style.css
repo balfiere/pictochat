@@ -1,0 +1,241 @@
+/*----- variables -----*/
+
+:root {
+  /*-- page background --*/
+	--unit: 120px; /* changes how big the boxes in the background appear */
+  --page-background:white;
+	--grid-color: #ddd;
+	--scan-color: #eee;
+
+  /*-- sizing stuff --*/
+  --p: 4; /* pixel multiplier. needs to be a unitless integer. */
+  --pixel: calc(var(--p) * 1px); /* don't change this */
+  --s: calc(var(--pixel) * 3); /* size of the cut. you can change the number on the right of the asterisk for a deeper or shallower cut */
+  --wrapper-width: 90%; /* changes the width of the boxes. i recommend keeping the unit as %, vw, or dvw so the boxes scale relative to the page size. this will make your page mobile responsive out of the box. */
+  --wrapper-max-width: 68em; /* changes the maximum width of the boxes. makes it easier to read on desktop. */
+
+  /*-- colors --*/
+  --box-text: black;
+  --box-background: white;
+  --box-border: rgb(249, 108, 177);
+
+  /* "date" refers to the upper left hand section, where the username would be in the original pictochat. */
+  --date-text: var(--box-border);
+  --date-background: rgb(249, 108, 177, 0.3);
+
+  --link: var(--box-border);
+  --link-hover:rgb(93, 139, 227);
+
+  /*-- dark mode --*/
+  --page-background-dark:rgb(19, 19, 19);
+	--grid-color-dark: #161616;
+	--scan-color-dark: #3b3b3b;
+
+  --box-text-dark: #ddd;
+  --box-background-dark: rgb(34, 34, 34);
+  --box-border-dark: var(--box-border);
+
+  --date-text-dark: var(--box-border-dark);
+  --date-background-dark: var(--date-background);
+
+  --link-dark: var(--box-border-dark);
+  --link-hover-dark:var(--link-hover);
+}
+
+/*----- fonts -----*/
+
+@font-face {
+  font-family:"NDS BIOS";
+  src:  url("ndsbios.woff") format("woff");
+  font-weight:normal;
+  font-style:normal;
+}
+
+/*----- body -----*/
+
+* {
+  cursor: url(stylus.gif) 0 32, auto;
+}
+
+body {
+	background-size: 
+		var(--unit) var(--unit),
+		var(--unit) var(--unit),
+		var(--unit) var(--unit),
+		var(--unit) calc(var(--unit) / 24);
+  background-color: var(--page-background);
+	background-image: 
+		linear-gradient(to right, var(--grid-color) calc(var(--unit)/48), transparent 1px), 
+		linear-gradient(to bottom, var(--grid-color) calc(var(--unit)/48), transparent 1px),
+		radial-gradient(var(--grid-color) calc(var(--unit)/24), transparent 0),
+		linear-gradient(to bottom, var(--scan-color) 50%, transparent 1px);
+	background-position:
+		calc(50% - var(--unit)/2 - 1px) calc(var(--unit)/2),
+		calc(50% - var(--unit)/2 - 1px) calc(var(--unit)/2),
+		calc(50% - var(--unit) * (1 - 1/48) - 1px) calc(var(--unit) * (1 + 1/48)),
+		calc(50% - var(--unit)/2 - 1px) calc(var(--unit)/2);
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  color: var(--link);
+  -webkit-transition:all 0.3s ease-in-out;
+  -moz-transition:all 0.3s ease-in-out;
+  -o-transition:all 0.3s ease-in-out;
+  -ms-transition:all 0.3s ease-in-out;
+  transition:all 0.3s ease-in-out;
+  &:hover{
+    color: var(--link-hover);
+  }
+}
+
+code {
+  font-family: unset;
+  background: var(--date-background);
+}
+
+/*----- wrapper for the messages -----*/
+
+#wrapper {
+  width: var(--wrapper-width);
+  max-width: var(--wrapper-max-width);
+  margin: 0 auto;
+  position: relative;
+}
+
+/*----- styling for each box -----*/
+
+.box {
+  font-family: "NDS BIOS", Arial, sans-serif;
+  box-sizing: border-box;
+  font-size: calc(var(--pixel) * 16);
+  position:relative;
+  margin: calc(var(--pixel) * 16) 0;
+  background-color:var(--box-background);
+  color: var(--box-text);
+  clip-path: polygon(
+      var(--s) 0%, 
+      calc(100% - var(--s)) 0%, 
+      100% var(--s), 100% calc(100% - var(--s)), 
+      calc(100% - var(--s)) 100%, 
+      var(--s) 100%, 
+      0% calc(100% - var(--s)), 
+      0% var(--s));
+}
+
+.box:before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index: -1;
+  background: linear-gradient(45deg,var(--box-border),var(--box-border));
+  --g1:#000 var(--pixel),#0000 0 calc(100% - var(--pixel)),#000 0;
+  --g2:#0000   calc(0.707*var(--s)), 
+        #000  0 calc(0.707*var(--s) + var(--pixel)),
+        #0000 0 calc(100% - 0.707*var(--s) - var(--pixel)),
+        #000  0 calc(100% - 0.707*var(--s)),
+        #0000 0;
+  -webkit-mask:
+    linear-gradient(45deg ,var(--g2)),
+    linear-gradient(-45deg,var(--g2)),
+    linear-gradient(90deg ,var(--g1)) 50%/100% calc(100% - 2*var(--s)) no-repeat,
+    linear-gradient(180deg,var(--g1)) 50%/calc(100% - 2*var(--s)) 100% no-repeat;
+    mask:
+      linear-gradient(45deg ,var(--g2)),
+      linear-gradient(-45deg,var(--g2)),
+      linear-gradient(90deg ,var(--g1)) 50%/100% calc(100% - 2*var(--s)) no-repeat,
+      linear-gradient(180deg,var(--g1)) 50%/calc(100% - 2*var(--s)) 100% no-repeat;
+}
+
+/*----- date/username/text in the upper left styling -----*/
+
+.date {
+  float: left;
+  position: relative;
+  z-index: -2;
+  padding: calc(var(--pixel) * 0) calc(var(--pixel) * 4);
+  color: var(--date-text);
+  background: var(--date-background);
+  clip-path: polygon(var(--s) 0, 100% 0, 100% calc(100% - var(--s)), calc(100% - var(--s)) 100%, 0 100%, 0 var(--s));
+  margin-right: calc(var(--pixel) * 3);
+  line-height: calc(var(--pixel) * 19);
+  margin-top: calc(var(--pixel) * -1);
+  box-sizing: border-box;
+}
+
+.date:before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(45deg,var(--box-border),var(--box-border));
+  --g3:#0000 0 calc(100% - var(--pixel)),#000 0;
+  --g4:#0000   calc(0.707*var(--s)), 
+        #000  0 calc(0.707*var(--s) + var(--pixel)),
+        #0000 0 calc(100% - 0.707*var(--s) - var(--pixel)),
+        #0000 0;
+  -webkit-mask:
+    linear-gradient(-45deg,var(--g4)),
+    linear-gradient(90deg ,var(--g3)) 100% calc(100% - var(--s)) no-repeat,
+    linear-gradient(180deg,var(--g3)) calc(100% - var(--s)) 100% no-repeat;
+    mask:
+      linear-gradient(-45deg,var(--g4)),
+      linear-gradient(90deg ,var(--g3)) 100% calc(100% - var(--s)) no-repeat,
+      linear-gradient(180deg,var(--g3)) calc(100% - var(--s)) 100% no-repeat;
+}
+
+/*----- styling for the message inside the box -----*/
+
+.message {
+  padding: calc(var(--pixel) * 0) calc(var(--pixel) * 4) calc(var(--pixel) * 0) calc(var(--pixel) * 4);
+  line-height: calc(var(--pixel) * 18);
+}
+
+/*----- unique styles. add these classes to divs with the class "box" -----*/
+
+.onepx {
+  --pixel:1px; 
+  --s:calc(var(--pixel) * 3);
+  width: 200px;
+  margin: 0 auto;
+}
+
+.blue {
+  --date-text: rgb(93, 139, 227);
+  --date-background: rgb(93, 139, 227, 0.3);
+  --box-border: rgb(93, 139, 227);
+  --link-hover:rgb(249, 108, 177);
+}
+
+/*----- dark mode support -----*/
+
+@media (prefers-color-scheme: dark) {
+  body{
+    background-color: var(--page-background-dark);
+    background-image: 
+      linear-gradient(to right, var(--grid-color-dark) calc(var(--unit)/48), transparent 1px), 
+      linear-gradient(to bottom, var(--grid-color-dark) calc(var(--unit)/48), transparent 1px),
+      radial-gradient(var(--grid-color-dark) calc(var(--unit)/24), transparent 0),
+      linear-gradient(to bottom, var(--scan-color-dark) 50%, transparent 1px);
+    }
+
+  .box{
+    background-color:var(--box-background-dark);
+    color: var(--box-text-dark);
+  }
+
+  .box:before, .date:before {
+    background: linear-gradient(45deg,var(--box-border-dark),var(--box-border-dark));
+  }
+
+  .date{
+    color: var(--date-text-dark);
+    background: var(--date-background-dark);}
+
+  a {
+    color: var(--link-dark);
+    &:hover{
+      color: var(--link-hover-dark);
+    }
+  }
+}
