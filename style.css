@@ -107,8 +107,8 @@ code {
 /*----- styling for each box -----*/
 
 .box {
-  font-family: "NDS BIOS", Arial, sans-serif;
   box-sizing: border-box;
+  font-family: "NDS BIOS", Arial, sans-serif;
   font-size: calc(var(--pixel) * 16);
   position:relative;
   margin: calc(var(--pixel) * 16) 0;
@@ -205,6 +205,14 @@ code {
   --date-background: rgb(93, 139, 227, 0.3);
   --box-border: rgb(93, 139, 227);
   --link-hover:rgb(249, 108, 177);
+  
+  --box-border-dark: var(--box-border);
+
+  --date-text-dark: var(--box-border-dark);
+  --date-background-dark: var(--date-background);
+
+  --link-dark: var(--box-border-dark);
+  --link-hover-dark:var(--link-hover);
 }
 
 /*----- dark mode support -----*/
